@@ -1,11 +1,17 @@
 "use client";
 import { numberWithCommas } from "@/lib";
 import { useState, useEffect } from "react";
+interface Category {
+  slug: string;
+  total: number;
+  category: string;
+}
+
 
 export default function Home() {
-  const [category, setCategory] = useState("");
 
-  const [data, setData] = useState([]);
+  const [category, setCategory] = useState("");
+  const [data, setData] = useState<Category[]>([]);
   // fetch expenses data
 
   async function fectExpenses(slug: any) {
@@ -16,23 +22,27 @@ export default function Home() {
     data = data.filter((item: { category_slug: any }) => item.category_slug === slug);
     // sum the total amount of expenses
     total = data.reduce(
-      (acc: any, item: { amount: any }) => acc + parseInt(item.amount),
+      (acc: any, item: { amount: any }) => acc + Number(item.amount),
       0
     );
+    console.log(numberWithCommas(total))
 
-      return Number(total);
+      return Math.floor(total);
   }
 
   async function fetchData() {
     try {
-      await fetch("api/category")
-        .then((response) => response.json())
-        .then((data) =>{
-         for (let i = 0; i < data.length; i++) {
-            data[i].total = fectExpenses(data[i].slug);
-        }  
-          setData(data)
-    });
+      const categoryResponse = await fetch("api/category");
+      const categories = await categoryResponse.json();
+  
+      const promises = categories.map(async (category: { slug: any; total: number; }) => {
+        const total = await fectExpenses(category.slug);
+        category.total = total;
+        return category;
+      });
+  
+      const updatedCategories = await Promise.all(promises);
+      setData(updatedCategories);
     } catch (error) {
       console.error(error);
     }

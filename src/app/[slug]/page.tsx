@@ -35,7 +35,6 @@ export default function Expenses(props: any) {
         .then((response) => response.json())
         .then((data) => {
           const category = data.find((item: any) => item.slug === slug);
-          console.log(category);
           setCategory(category);
         });
     } catch (error) {
