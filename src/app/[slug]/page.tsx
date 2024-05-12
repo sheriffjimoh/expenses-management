@@ -162,7 +162,7 @@ export default function Expenses(props: any) {
                 className="flex justify-between p-2  w-full border-b"
               >
                 <span>{item.name}</span>
-                <span>{numberWithCommas(item.amount)}</span>
+                <span>{numberWithCommas(Number(item.amount))}</span>
 
                 <button
                   className="bg-red-500 text-white p-2"
