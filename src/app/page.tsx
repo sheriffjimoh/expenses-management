@@ -1,16 +1,38 @@
 "use client";
+import { numberWithCommas } from "@/lib";
 import { useState, useEffect } from "react";
 
 export default function Home() {
   const [category, setCategory] = useState("");
 
   const [data, setData] = useState([]);
+  // fetch expenses data
+
+  async function fectExpenses(slug: any) {
+    let total = 0;
+    const response = await fetch("api/expenses");
+    let data = await response.json();
+    // filter the data based on the category slug
+    data = data.filter((item: { category_slug: any }) => item.category_slug === slug);
+    // sum the total amount of expenses
+    total = data.reduce(
+      (acc: any, item: { amount: any }) => acc + parseInt(item.amount),
+      0
+    );
+
+      return Number(total);
+  }
 
   async function fetchData() {
     try {
       await fetch("api/category")
         .then((response) => response.json())
-        .then((data) => setData(data));
+        .then((data) =>{
+         for (let i = 0; i < data.length; i++) {
+            data[i].total = fectExpenses(data[i].slug);
+        }  
+          setData(data)
+    });
     } catch (error) {
       console.error(error);
     }
@@ -77,13 +99,13 @@ export default function Home() {
       <div className="flex flex-col items-center justify-center mt-5 w-full">
         <h2 className="text-lg font-bold">Category List</h2>
         <ul className="mt-3 w-full">
-          {data.map((item: { slug: string; category: String}) => (
+          {data.map((item: { slug: string; category: String, total: number}) => (
            // display it in a list with link to the category page
             <li key={item.slug} className="text-blue-500 dark:bg-slate-200 p-4 my-3">
               <a href={`/${item.slug}`} className="flex justify-between w-full">
                 <span className="text-gray-500">{item.category}</span>
 
-              <span className="text-gray-500">N2,00000</span>
+              <span className="text-gray-500">{numberWithCommas(item?.total)}</span>
               </a>
             </li>
           ))}
