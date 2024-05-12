@@ -52,18 +52,19 @@ export async function DELETE(request: Request) {
     const { id } =  await request.json();
     const filePath = path.resolve("src/app/data/expenses.json");
     let data = await readFile (filePath, "utf8");
-    let existingData = [];
-    if (data) {
-      existingData = JSON.parse(data);
-      const expensesExist = existingData.find((item: { id: any }) => item.id === id);
-      if (!expensesExist) {
-        return new Response("Category does not exist", { status: 400 });
-      }
-    }
-    const newData = existingData.filter((item: { id: any }) => item.id !== id);
-    await writeFile
-    (filePath, JSON.stringify(newData, null, 2));
-    return new Response("Data deleted successfully", { status: 200 });
+    return new Response(data, { status: 200 })
+    // let existingData = [];
+    // if (data) {
+    //   existingData = JSON.parse(data);
+    //   const expensesExist = existingData.find((item: { id: any }) => item.id === id);
+    //   if (!expensesExist) {
+    //     return new Response("Category does not exist", { status: 400 });
+    //   }
+    // }
+    // const newData = existingData.filter((item: { id: any }) => item.id !== id);
+    // await writeFile
+    // (filePath, JSON.stringify(newData, null, 2));
+    // return new Response("Data deleted successfully", { status: 200 });
 
 }
 
