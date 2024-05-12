@@ -30,8 +30,6 @@ export async function POST(request: Request) {
         return new Response("Category already exists", { status: 400 });
       }
     }
-    // Append new data to the existing array
-    // add slug and id to the new data before saving it to the JSON file
     json.id = existingData.length + 1;
     json.slug = json.category.toLowerCase().replace(/ /g, "-");
     json.date = new Date().toISOString();
