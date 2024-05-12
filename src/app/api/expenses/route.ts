@@ -63,7 +63,7 @@ export async function DELETE(request: Request) {
     }
     const newData = existingData.filter((item: { id: any }) => item.id !== id);
 
-    // await writeFile (filePath, JSON.stringify(newData, null, 2));
+    await writeFile (filePath, JSON.stringify(newData, null, 2));
     return new Response("Data deleted successfully", { status: 200 });
 
 }
