@@ -53,13 +53,14 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between p-5 mt-10">
       <div className="shadow-md md:min-w-xl p-3">
-      <form className="flex  items-center justify-center">
+        <h1 className="text-3xl font-bold text-center my-3">Expenses Management App</h1>
+      <form className="flex  items-center justify-center mt-10">
         <input
           type="text"
           placeholder="Category"
-          className="border border-gray-300 text-black rounded p-2 "
+          className="border text-black border-gray-300 p-2 m-2 md:w-auto w-full"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         />
@@ -70,10 +71,10 @@ export default function Home() {
             saveDataToJSON();
           }}
         >
-          Submit
+          Save
         </button>
       </form>
-      <div className="flex flex-col items-center justify-center mt-5">
+      <div className="flex flex-col items-center justify-center mt-5 w-full">
         <h2 className="text-lg font-bold">Category List</h2>
         <ul className="mt-3 w-full">
           {data.map((item: { slug: string; category: String}) => (

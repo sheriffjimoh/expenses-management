@@ -12,9 +12,10 @@ export default function Expenses(props: any) {
 
   async function fetchData() {
     try {
-      await fetch("api/expenses")
+      await fetch(`api/expenses`)
         .then((response) => response.json())
         .then((data) => {
+            data = data.filter((item: any) => item.category_slug === slug);
           setData(data);
           const total = data.reduce(
             (acc: any, item: any) => acc + parseInt(item.amount),
