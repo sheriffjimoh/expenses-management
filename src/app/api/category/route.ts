@@ -2,7 +2,6 @@ const { readFile, writeFile } = require("fs").promises;
 import path from "path";
 import data from "../../data/category.json";
 
-
 export async function GET(request: Request) {
   return new Response(JSON.stringify(data), {
     headers: {
@@ -48,7 +47,6 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  return new Response("Hello World PUT");
 }
 
 export async function DELETE(request: Request) {
