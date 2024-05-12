@@ -29,7 +29,7 @@ export default function Expenses(props: any) {
   }
 
   // get category and filter the data based on the category slug
-  const fetchCtegory = async () => {
+  const fetchCategory = async () => {
     try {
       await fetch("api/category")
         .then((response) => response.json())
@@ -42,7 +42,7 @@ export default function Expenses(props: any) {
     }
   };
   useEffect(() => {
-    fetchCtegory();
+    fetchCategory();
   }, [slug]);
 
   useEffect(() => {
