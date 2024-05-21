@@ -1,8 +1,13 @@
 "use client";
 import { numberWithCommas } from "@/lib";
 import React, { useState, useEffect } from "react";
-export default function Expenses(props: any) {
-  const { slug } = props.params;
+type Id = {
+  params: {
+    id: string;
+  };
+};
+export default function Expenses({ params: { id } }: Id) {
+  console.log(id);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [data, setData] = useState([]);
@@ -15,7 +20,7 @@ export default function Expenses(props: any) {
       await fetch(`api/expenses`)
         .then((response) => response.json())
         .then((data) => {
-            data = data.filter((item: any) => item.category_slug === slug);
+          data = data.filter((item: any) => item.categoryId === id);
           setData(data);
           const total = data.reduce(
             (acc: any, item: any) => acc + parseInt(item.amount),
@@ -29,22 +34,24 @@ export default function Expenses(props: any) {
   }
 
   // get category and filter the data based on the category slug
-  const fetchCategory = async () => {
-    try {
-      await fetch("api/category")
-        .then((response) => response.json())
-        .then((data) => {
-          const category = data.find((item: any) => item.slug === slug);
-          setCategory(category);
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(() => {
-    fetchCategory();
-  }, [slug]);
 
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        await fetch("api/category")
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            const category = data.find((item: any) => item._id === id);
+            setCategory(category);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCategory();
+  }, [id]);
+  console.log(category);
   useEffect(() => {
     fetchData();
   }, [isLoading]);
@@ -74,12 +81,12 @@ export default function Expenses(props: any) {
         console.error(error);
       }
     }
-    }
-
+  }
+  console.log(category);
   async function saveDataToJSON() {
     setIsLoading(true);
     const data = {
-      category_slug: slug,
+      categoryId: id,
       amount,
       name,
     };
@@ -113,66 +120,65 @@ export default function Expenses(props: any) {
   }
 
   return (
-    <main className="px-5 mt-10">
+    <main className='px-5 mt-10'>
       <button
         onClick={() => window.history.back()}
-        className="bg-blue-500 text-white p-2 m-2"
+        className='bg-blue-500 text-white p-2 m-2'
       >
         &lt; Back
       </button>
-      <div className="shadow-md mx-auto">
-        <div className="flex md:flex-row   justify-between  my-5  w-full border-b">
-          <h1 className="text-xl font-bold text-center my-3">
+      <div className='shadow-md mx-auto'>
+        <div className='flex md:flex-row   justify-between  my-5  w-full border-b'>
+          <h1 className='text-xl font-bold text-center my-3'>
             {category?.category}
           </h1>
-          <h1 className="text-sm font-bold text-center my-3">
+          <h1 className='text-sm font-bold text-center my-3'>
             Total: {numberWithCommas(total)}
           </h1>
         </div>
-        <form className="flex md:flex-row flex-col  items-center justify-center">
+        <form className='flex md:flex-row flex-col  items-center justify-center'>
           <input
-            type="text"
-            placeholder="Name of Expense"
+            type='text'
+            placeholder='Name of Expense'
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border text-black border-gray-300 p-2 m-2 md:w-auto w-full"
+            className='border text-black border-gray-300 p-2 m-2 md:w-auto w-full'
           />
           <input
-            type="number"
-            placeholder="Amount"
+            type='number'
+            placeholder='Amount'
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="border text-black border-gray-300 p-2 m-2 md:w-auto w-full"
+            className='border text-black border-gray-300 p-2 m-2 md:w-auto w-full'
           />
           <button
-            type="button"
+            type='button'
             onClick={saveDataToJSON}
-            className="bg-blue-500 text-white p-2 m-2 md:w-auto w-full"
+            className='bg-blue-500 text-white p-2 m-2 md:w-auto w-full'
           >
             Save
           </button>
         </form>
 
-        <div className="flex flex-col md:w-auto items-center justify-center mt-10">
-          <h2 className="text-lg font-bold">Expenses List</h2>
-          <ul className="mt-3  w-full">
+        <div className='flex flex-col md:w-auto items-center justify-center mt-10'>
+          <h2 className='text-lg font-bold'>Expenses List</h2>
+          <ul className='mt-3  w-full'>
             {data.map((item: any) => (
               <li
                 key={item.id}
-                className="flex justify-between p-2  w-full border-b"
+                className='flex justify-between p-2  w-full border-b'
               >
                 <span>{item.name}</span>
                 <span>{numberWithCommas(Number(item.amount))}</span>
 
                 <button
-                  className="bg-red-500 text-white p-2"
+                  className='bg-red-500 text-white p-2'
                   onClick={() => {
-                   deleteData(item.id);
+                    deleteData(item.id);
                   }}
                 >
-                    Delete
+                  Delete
                 </button>
-
               </li>
             ))}
           </ul>
