@@ -24,9 +24,6 @@ export async function POST(request: Request) {
   try {
     const json = await request.json();
     await connectToDatabase(); // Await if it's an async function
-    console.log(json.categoryId);
-    console.log(json.name);
-    console.log(json.amount);
     const existingExpense = await Expense.findOne({
       name: json.name,
       categoryId: json.categoryId,
