@@ -1,23 +1,9 @@
 [
   {
-    "category_slug": "fishing-2024",
+    "categoryId": "fishing-2024",
     "amount": "3000",
     "name": "Fish Restock",
     "id": 3,
     "date": "2024-05-12T14:28:59.287Z"
-  },
-  {
-    "category_slug": "fishing-2024",
-    "amount": "30000",
-    "name": "Pipes",
-    "id": 2,
-    "date": "2024-05-19T15:15:44.405Z"
-  },
-  {
-    "category_slug": "fishing-2024",
-    "amount": "90000",
-    "name": "New Pound",
-    "id": 3,
-    "date": "2024-05-19T15:16:08.406Z"
   }
 ]
