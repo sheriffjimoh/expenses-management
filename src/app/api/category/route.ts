@@ -34,7 +34,6 @@ export async function POST(request: Request) {
     json.slug = json.category.toLowerCase().replace(/ /g, "-");
     json.date = new Date().toISOString();
     existingData.push(json);
-    // Write the updated data back to the JSON file
     await writeFile(filePath, JSON.stringify(existingData, null, 2));
 
     return new Response("Data saved successfully", { status: 200 });
