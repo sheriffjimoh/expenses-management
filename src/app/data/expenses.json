@@ -5,12 +5,5 @@
     "name": "Fish Restock",
     "id": 3,
     "date": "2024-05-12T14:28:59.287Z"
-  },
-  {
-    "categoryId": "shoes",
-    "amount": "200",
-    "name": "pen",
-    "id": 2,
-    "date": "2024-05-21T10:17:33.634Z"
   }
 ]
