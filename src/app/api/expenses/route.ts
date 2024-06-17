@@ -1,7 +1,4 @@
-const { readFile, writeFile } = require("fs").promises;
-import path from "path";
-import data from "../../data/expenses.json";
-import { Category, Expense, connectToDatabase } from "@/lib/mongoDb";
+import { Expense, connectToDatabase } from "@/lib/mongoDb";
 import { NextResponse } from "next/server";
 
 export async function GET() {
