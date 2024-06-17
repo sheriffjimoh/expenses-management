@@ -85,16 +85,16 @@ export default function Home() {
         <h1 className='text-3xl font-bold text-center my-3'>
           Expenses Management App
         </h1>
-        <form className='flex  items-center justify-center mt-10'>
+        <form className='flex  items-center justify-center mt-10 w-full'>
           <input
             type='text'
             placeholder='Category'
-            className='border text-black border-gray-300 p-2 m-2 md:w-auto w-full'
+            className='border text-black border-gray-300 p-2 m-2  w-full rounded-md'
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           />
           <button
-            className='bg-blue-500 text-white  p-2'
+            className='bg-blue-500 text-white  p-2  px-5 rounded-md '
             onClick={(e) => {
               e.preventDefault();
               saveDataToJSON();
