@@ -32,9 +32,6 @@ export default function Home() {
     async function fetchData() {
       try {
         const { data: categories } = await axios.get("api/category");
-        // console.log(categoryResponse);
-        // const categories = await categoryResponse.json();
-        console.log(categories);
         const promises = categories.map(
           async (category: { _id: any; total: number }) => {
             const total = await fectExpenses(category._id);
@@ -81,7 +78,7 @@ export default function Home() {
       console.error(error);
     }
   }
-  // git checkout -b migrate-db-to-mongodb
+  
   return (
     <main className='flex min-h-screen flex-col items-center justify-between p-5 mt-10'>
       <div className='shadow-md md:min-w-xl p-3'>

@@ -1,21 +1,13 @@
-const { readFile, writeFile } = require("fs").promises;
 import { Category, connectToDatabase } from "@/lib/mongoDb";
 import { NextResponse } from "next/server";
 
-// export async function GET(request: Request) {
-//   return new Response(JSON.stringify(data), {
-//     headers: {
-//       "content-type": "application/json",
-//     },
-//   });
-// }
 export async function HEAD(request: Request) {
   return new Response("Hello World HEAD");
 }
 
 export async function GET() {
   try {
-    await connectToDatabase(); // Await if it's an async function
+    await connectToDatabase(); 
     const allCat = await Category.find({});
     return NextResponse.json(allCat, { status: 200 });
   } catch (err) {
@@ -27,10 +19,10 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    await connectToDatabase(); // Await if it's an async function
+    await connectToDatabase(); 
     const existCat = await Category.findOne({ name: data.category });
     if (existCat) {
-      return new Response("Category already exists", { status: 400 }); // 400 status for a bad request
+      return new Response("Category already exists", { status: 400 });
     } else {
       const newCat = new Category({
         name: data.category,
