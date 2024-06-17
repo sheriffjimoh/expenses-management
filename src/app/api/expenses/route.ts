@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       name: json.name,
       categoryId: json.categoryId,
     });
-    console.log(existingExpense);
+
     if (existingExpense) {
       return new Response("Expenses already exists", { status: 400 });
     } else {
@@ -47,62 +47,27 @@ export async function POST(request: Request) {
   }
 }
 
-// export async function POST(request: Request) {
-//   try {
-//     const json = await request.json();
-//     console.log(json);
-//     const filePath = path.resolve("src/app/data/expenses.json");
-//     let data = await readFile(filePath, "utf8");
-
-//     let existingData = [];
-//     if (data) {
-//       existingData = JSON.parse(data);
-
-//       const expensesExist = existingData.find(
-//         (item: { name: any; category_slug: any }) =>
-//           item.name === json.name && item.category_slug === json.category_slug
-//       );
-//       if (expensesExist) {
-//         return new Response("Category already exists", { status: 400 });
-//       }
-//     }
-
-//     json.id = existingData.length + 1;
-//     json.date = new Date().toISOString();
-//     existingData.push(json);
-//     // Write the updated data back to the JSON file
-//     await writeFile(filePath, JSON.stringify(existingData, null, 2));
-
-//     return new Response("Data saved successfully", { status: 200 });
-//   } catch (err) {
-//     console.error(err);
-//     return new Response("Failed to process data", { status: 500 });
-//   }
-// }
 
 export async function PUT(request: Request) {
   return new Response("Hello World PUT");
 }
 
 export async function DELETE(request: Request) {
-  const { id } = await request.json();
-  const filePath = path.resolve("src/app/data/expenses.json");
-  let data = await readFile(filePath, "utf8");
+  try {
+    const { id } = await request.json();
+    await connectToDatabase(); // Await if it's an async function
+    const existingExpense = await Expense.findOne({ _id: id });
 
-  let existingData = [];
-  if (data) {
-    existingData = JSON.parse(data);
-    const expensesExist = existingData.find(
-      (item: { id: any }) => item.id === id
-    );
-    if (!expensesExist) {
+    if (!existingExpense) {
       return new Response("Expenses does not exist", { status: 400 });
+    } else {
+      await existingExpense.remove();
+      return new Response("Data deleted successfully", { status: 200 });
     }
+  } catch (err) {
+    console.error(err);
+    return new Response("Failed to process data", { status: 500 });
   }
-  const newData = existingData.filter((item: { id: any }) => item.id !== id);
-
-  await writeFile(filePath, JSON.stringify(newData, null, 2));
-  return new Response("Data deleted successfully", { status: 200 });
 }
 
 export async function PATCH(request: Request) {
