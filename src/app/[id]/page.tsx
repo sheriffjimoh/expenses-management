@@ -82,7 +82,7 @@ export default function Expenses({ params: { id } }: Id) {
       }
     }
   }
-  console.log(category);
+ 
   async function saveDataToJSON() {
     setIsLoading(true);
     const data = {
@@ -174,7 +174,7 @@ export default function Expenses({ params: { id } }: Id) {
                 <button
                   className='bg-red-500 text-white p-2'
                   onClick={() => {
-                    deleteData(item.id);
+                    deleteData(item._id);
                   }}
                 >
                   Delete

@@ -61,11 +61,11 @@ export async function DELETE(request: Request) {
     if (!existingExpense) {
       return new Response("Expenses does not exist", { status: 400 });
     } else {
-      await existingExpense.remove();
+      await Expense.deleteOne({ _id: id });
       return new Response("Data deleted successfully", { status: 200 });
     }
   } catch (err) {
-    console.error(err);
+    console.error("DELETE Expenses ERROR::",err);
     return new Response("Failed to process data", { status: 500 });
   }
 }
