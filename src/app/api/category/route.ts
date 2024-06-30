@@ -33,9 +33,9 @@ export async function POST(request: Request) {
       console.log(result);
       return new Response("Data saved successfully", { status: 200 });
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error(err);
-    return new Response("Failed to process data", { status: 500 });
+    return new Response(err, { status: 500 });
   }
 }
 

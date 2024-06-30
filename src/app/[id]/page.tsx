@@ -7,7 +7,6 @@ type Id = {
   };
 };
 export default function Expenses({ params: { id } }: Id) {
-  console.log(id);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [data, setData] = useState([]);
@@ -41,8 +40,8 @@ export default function Expenses({ params: { id } }: Id) {
         await fetch("api/category")
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
             const category = data.find((item: any) => item._id === id);
+            console.log({ category })
             setCategory(category);
           });
       } catch (error) {
@@ -50,11 +49,10 @@ export default function Expenses({ params: { id } }: Id) {
       }
     };
     fetchCategory();
-  }, [id]);
-  console.log(category);
-  useEffect(() => {
     fetchData();
-  }, [isLoading]);
+  }, [id]);
+
+
 
   function deleteData(id: any) {
     if (window.confirm("Are you sure you want to delete this item?")) {

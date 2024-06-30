@@ -61,9 +61,9 @@ export async function DELETE(request: Request) {
       await Expense.deleteOne({ _id: id });
       return new Response("Data deleted successfully", { status: 200 });
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error("DELETE Expenses ERROR::",err);
-    return new Response("Failed to process data", { status: 500 });
+    return new Response(err, { status: 500 });
   }
 }
 
