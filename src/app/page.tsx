@@ -1,10 +1,12 @@
 "use client";
 import { numberWithCommas } from "@/lib";
+import axios from "axios";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 interface Category {
-  slug: string;
+  _id: string;
   total: number;
-  category: string;
+  name: string;
 }
 
 export default function Home() {
@@ -12,14 +14,12 @@ export default function Home() {
   const [data, setData] = useState<Category[]>([]);
   // fetch expenses data
 
-  async function fectExpenses(slug: any) {
+  async function fectExpenses(_id: any) {
     let total = 0;
     const response = await fetch("api/expenses");
     let data = await response.json();
-    // filter the data based on the category slug
-    data = data.filter(
-      (item: { category_slug: any }) => item.category_slug === slug
-    );
+    // filter the data based on the category _id
+    data = data.filter((item: { categoryId: any }) => item.categoryId === _id);
     // sum the total amount of expenses
     total = data.reduce(
       (acc: any, item: { amount: any }) => acc + Number(item.amount),
@@ -30,25 +30,22 @@ export default function Home() {
 
   async function fetchData() {
     try {
-      const categoryResponse = await fetch("api/category");
-      const categories = await categoryResponse.json();
-
+      const { data: categories } = await axios.get("api/category");
       const promises = categories.map(
-        async (category: { slug: any; total: number }) => {
-          const total = await fectExpenses(category.slug);
+        async (category: { _id: any; total: number }) => {
+          const total = await fectExpenses(category._id);
           category.total = total;
           return category;
         }
       );
-
       const updatedCategories = await Promise.all(promises);
       setData(updatedCategories);
     } catch (error) {
       console.error(error);
     }
   }
-
   useEffect(() => {
+ 
     fetchData();
   }, [category]);
 
@@ -75,6 +72,7 @@ export default function Home() {
           if (data.status === 200) {
             alert("Data saved successfully");
             setCategory("");
+            fetchData();
           }
         })
         .catch((error) => console.log(error));
@@ -82,23 +80,23 @@ export default function Home() {
       console.error(error);
     }
   }
-
+  
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-5 mt-10">
-      <div className="shadow-md md:min-w-xl p-3">
-        <h1 className="text-3xl font-bold text-center my-3">
+    <main className='flex min-h-screen flex-col items-center justify-between p-5 mt-10'>
+      <div className='shadow-md md:min-w-xl p-3'>
+        <h1 className='text-3xl font-bold text-center my-3'>
           Expenses Management App
         </h1>
-        <form className="flex  items-center justify-center mt-10">
+        <form className='flex  items-center justify-center mt-10 w-full'>
           <input
-            type="text"
-            placeholder="Category"
-            className="border text-black border-gray-300 p-2 m-2 md:w-auto w-full"
+            type='text'
+            placeholder='Category'
+            className='border text-black border-gray-300 p-2 m-2  w-full rounded-md'
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           />
           <button
-            className="bg-blue-500 text-white  p-2"
+            className='bg-blue-500 text-white  p-2  px-5 rounded-md '
             onClick={(e) => {
               e.preventDefault();
               saveDataToJSON();
@@ -107,29 +105,27 @@ export default function Home() {
             Save
           </button>
         </form>
-        <div className="flex flex-col items-center justify-center mt-5 w-full">
-          <h2 className="text-lg font-bold">Category List</h2>
-          <ul className="mt-3 w-full">
-            {data.map(
-              (item: { slug: string; category: String; total: number }) => (
-                // display it in a list with link to the category page
-                <li
-                  key={item.slug}
-                  className="text-blue-500 dark:bg-slate-200 p-4 my-3"
+        <div className='flex flex-col items-center justify-center mt-5 w-full'>
+          <h2 className='text-lg font-bold'>Category List</h2>
+          <ul className='mt-3 w-full'>
+            {data.map((item: { _id: string; name: String; total: number }) => (
+              // display it in a list with link to the category page
+              <li
+                key={item._id}
+                className='text-blue-500 dark:bg-slate-200 p-4 my-3'
+              >
+                <Link
+                  href={`/${item._id}`}
+                  className='flex justify-between w-full'
                 >
-                  <a
-                    href={`/${item.slug}`}
-                    className="flex justify-between w-full"
-                  >
-                    <span className="text-gray-500">{item.category}</span>
+                  <span className='font-bold text-gray-500 capitalize'>{item.name}</span>
 
-                    <span className="text-gray-500">
-                      {numberWithCommas(item?.total)}
-                    </span>
-                  </a>
-                </li>
-              )
-            )}
+                  <span className='text-gray-500'>
+                    {numberWithCommas(item?.total)}
+                  </span>
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
