@@ -28,23 +28,24 @@ export default function Home() {
     return Math.floor(total);
   }
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const { data: categories } = await axios.get("api/category");
-        const promises = categories.map(
-          async (category: { _id: any; total: number }) => {
-            const total = await fectExpenses(category._id);
-            category.total = total;
-            return category;
-          }
-        );
-        const updatedCategories = await Promise.all(promises);
-        setData(updatedCategories);
-      } catch (error) {
-        console.error(error);
-      }
+  async function fetchData() {
+    try {
+      const { data: categories } = await axios.get("api/category");
+      const promises = categories.map(
+        async (category: { _id: any; total: number }) => {
+          const total = await fectExpenses(category._id);
+          category.total = total;
+          return category;
+        }
+      );
+      const updatedCategories = await Promise.all(promises);
+      setData(updatedCategories);
+    } catch (error) {
+      console.error(error);
     }
+  }
+  useEffect(() => {
+ 
     fetchData();
   }, [category]);
 
@@ -62,8 +63,6 @@ export default function Home() {
         body: JSON.stringify(data),
       })
         .then((data) => {
-
-          console.log({data})
           if (data.status === 400) {
             alert("Category already exists");
           }
@@ -73,6 +72,7 @@ export default function Home() {
           if (data.status === 200) {
             alert("Data saved successfully");
             setCategory("");
+            fetchData();
           }
         })
         .catch((error) => console.log(error));
