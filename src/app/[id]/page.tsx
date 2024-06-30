@@ -41,7 +41,6 @@ export default function Expenses({ params: { id } }: Id) {
           .then((response) => response.json())
           .then((data) => {
             const category = data.find((item: any) => item._id === id);
-            console.log({ category })
             setCategory(category);
           });
       } catch (error) {
@@ -71,6 +70,7 @@ export default function Expenses({ params: { id } }: Id) {
             }
             if (data.status === 200) {
               alert("Data deleted successfully");
+              fetchData();
             }
           })
           .catch((error) => console.log(error))
@@ -108,6 +108,7 @@ export default function Expenses({ params: { id } }: Id) {
             alert("Data saved successfully");
             setName("");
             setAmount("");
+            fetchData();
           }
         })
         .catch((error) => console.log(error))
@@ -166,7 +167,7 @@ export default function Expenses({ params: { id } }: Id) {
                 key={item.id}
                 className='flex justify-between p-2  w-full border-b'
               >
-                <span>{item.name}</span>
+                <span className="capitalize">{item.name}</span>
                 <span>{numberWithCommas(Number(item.amount))}</span>
 
                 <button

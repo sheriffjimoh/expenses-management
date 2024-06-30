@@ -118,7 +118,7 @@ export default function Home() {
                   href={`/${item._id}`}
                   className='flex justify-between w-full'
                 >
-                  <span className='font-bold text-gray-500'>{item.name}</span>
+                  <span className='font-bold text-gray-500 capitalize'>{item.name}</span>
 
                   <span className='text-gray-500'>
                     {numberWithCommas(item?.total)}
